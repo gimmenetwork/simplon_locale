@@ -1,21 +1,21 @@
 ```
-                                  _
-                                 ( |
-                                   |
-                            __,--./|.--,__
-                          .`   \ \ / /    `.
-                        .`      \ | /       `.
-                       /   /     ^|^      \   \
-                      /   / |     |o     | \   \
-                     /===/  |     |      |  \===\
-                    /___/   |     |o     |   \___\
-                            |     |      |
-                            |     |o     |
-                            |_____/\_____|
+                                          _
+                                         ( |
+                                           |
+                                    __,--./|.--,__
+                                  .`   \ \ / /    `.
+                                .`      \ | /       `.
+                               /   /     ^|^      \   \
+                              /   / |     |o     | \   \
+                             /===/  |     |      |  \===\
+                            /___/   |     |o     |   \___\
+                                    |     |      |
+                                    |     |o     |
+                                    |_____/\_____|
 
-                            SIMPLON LOCALE
+                                    SIMPLON LOCALE
 
-                     feels like switching shirts
+                             feels like switching shirts
 
-                           it's dead simple
+                                   it's dead simple
 ```
