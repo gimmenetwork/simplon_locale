@@ -1,0 +1,27 @@
+{
+    "name": "simplon/locale",
+    "description": "Simple, straight forward locale reader",
+    "homepage": "https://github.com/fightbulc/simplon_locale",
+    "type": "library",
+    "keywords": [
+        "locales",
+        "i18n",
+        "reader"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tino Ehrich",
+            "email": "tino@bigpun.me",
+            "role": "developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Simplon\\Locale\\": "src/"
+        }
+    }
+}
