@@ -2,17 +2,18 @@
 
 namespace Simplon\Locale;
 
+use Simplon\Locale\Readers\ReaderInterface;
+
 /**
- * Locale
+ * Class Locale
  * @package Simplon\Locale
- * @author Tino Ehrich (tino@bigpun.me)
  */
 class Locale
 {
     /**
-     * @var string
+     * @var ReaderInterface
      */
-    private $rootPathLocale;
+    private $reader;
 
     /**
      * @var array
@@ -22,12 +23,12 @@ class Locale
     /**
      * @var string
      */
-    private $defaultLocale;
+    private $currentLocale = 'en';
 
     /**
      * @var string
      */
-    private $currentLocale;
+    private $group;
 
     /**
      * @var array
@@ -35,23 +36,33 @@ class Locale
     private $localeContent = [];
 
     /**
-     * @param string $rootPathLocale
+     * @param ReaderInterface $reader
      * @param array $availableLocales
-     * @param string $defaultLocale
      */
-    public function __construct($rootPathLocale, $availableLocales = [], $defaultLocale = 'en')
+    public function __construct(ReaderInterface $reader, $availableLocales = [])
     {
-        // set root path
-        $this->rootPathLocale = rtrim($rootPathLocale, '/');
-
-        // list of valid locales
+        $this->reader = $reader;
         $this->availableLocales = $availableLocales;
+    }
 
-        // default/starting locale
-        $this->defaultLocale = $defaultLocale;
+    /**
+     * @return string
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
 
-        // load default
-        $this->setLocale($defaultLocale);
+    /**
+     * @param string $group
+     *
+     * @return Locale
+     */
+    public function setGroup($group)
+    {
+        $this->group = $group;
+
+        return $this;
     }
 
     /**
@@ -63,54 +74,48 @@ class Locale
     }
 
     /**
-     * @param $locale
+     * @param string $locale
      *
-     * @return bool
+     * @return Locale
      */
     public function setLocale($locale)
     {
         // validated locale
-        if ($this->isValidLocale($locale) === false)
+        if ($this->isValidLocale($locale))
         {
-            return false;
+            $this->currentLocale = $locale;
         }
 
-        // cache locale
-        $this->currentLocale = $locale;
-
-        return true;
+        return $this;
     }
 
     /**
-     * @param string $group
      * @param string $key
      * @param array $params
      *
      * @return string
      */
-    public function get($group, $key, $params = [])
+    public function get($key, $params = [])
     {
         // make sure that we have the locale content
-        $this->loadLocaleFile($this->currentLocale, $group);
+        $this->loadLocaleContent($this->currentLocale);
 
-        // build locale/group key
-        $localeFileCacheKey = $this->currentLocale . '-' . $group;
+        // handle content
+        $contentKey = $this->getContentKey($this->currentLocale);
 
-        // return key if we don't have anything
-        if (isset($this->localeContent[$localeFileCacheKey][$key]) === false)
+        if (empty($this->localeContent[$contentKey][$key]))
         {
             return $key;
         }
 
-        // get string
-        $string = $this->localeContent[$localeFileCacheKey][$key];
+        $string = $this->localeContent[$contentKey][$key];
 
         // replace params
         if (empty($params) === false)
         {
             foreach ($params as $k => $v)
             {
-                $string = str_replace('{{' . $k . '}}', $v, $string);
+                $string = str_replace('{' . $k . '}', $v, $string);
             }
         }
 
@@ -128,32 +133,38 @@ class Locale
     }
 
     /**
-     * @param $locale
-     * @param string $group
+     * @param string $locale
      *
-     * @return bool
+     * @return string
+     */
+    private function getContentKey($locale)
+    {
+        $contentKey = $locale;
+        $group = $this->getGroup();
+
+        if ($group !== null)
+        {
+            $contentKey = $locale . '-' . $group;
+        }
+
+        return $contentKey;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return Locale
      * @throws LocaleException
      */
-    private function loadLocaleFile($locale, $group = 'default')
+    private function loadLocaleContent($locale)
     {
-        $localeFileCacheKey = $locale . '/' . $group;
+        $contentKey = $this->getContentKey($locale);
 
-        // is locale already cached
-        if (isset($this->localeContent[$localeFileCacheKey]))
+        if (empty($this->localeContent[$contentKey]))
         {
-            return true;
+            $this->localeContent[$contentKey] = $this->reader->loadLocale($locale, $this->getGroup());
         }
 
-        // file path
-        $pathLocale = $this->rootPathLocale . '/' . $locale . '/' . $group . '-locale.php';
-
-        if (file_exists($pathLocale) === true)
-        {
-            $this->localeContent[$locale . '-' . $group] = require $pathLocale;
-
-            return true;
-        }
-
-        throw new LocaleException('Missing locale "' . $locale . '/' . $group . '" (assumed path: ' . $pathLocale . ')');
+        return $this;
     }
 }
