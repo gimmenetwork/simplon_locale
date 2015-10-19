@@ -11,16 +11,16 @@ use Simplon\Locale\LocaleException;
 class FileReader implements ReaderInterface
 {
     /**
-     * @var
+     * @var string[]
      */
-    private $rootPath;
+    private $paths;
 
     /**
-     * @param string $rootPath
+     * @param string[] $paths
      */
-    public function __construct($rootPath)
+    public function __construct(array $paths)
     {
-        $this->rootPath = $rootPath;
+        $this->paths = $paths;
     }
 
     /**
@@ -38,14 +38,21 @@ class FileReader implements ReaderInterface
         }
 
         $fileName = $locale . '-locale.php';
-        $pathFile = $this->rootPath . '/' . $fileName;
+        $content = [];
 
-        if (file_exists($pathFile) === true)
+        foreach ($this->paths as $path)
         {
+            $pathFile = $path . '/' . $fileName;
+
+            if (file_exists($pathFile) === false)
+            {
+                throw new LocaleException('Missing locale "' . $fileName . '" (assumed path: ' . $pathFile . ')');
+            }
+
             /** @noinspection PhpIncludeInspection */
-            return require $pathFile;
+            $content = array_merge($content, require $pathFile);
         }
 
-        throw new LocaleException('Missing locale "' . $fileName . '" (assumed path: ' . $pathFile . ')');
+        return $content;
     }
 }
