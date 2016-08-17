@@ -16,11 +16,18 @@ class FileReader implements ReaderInterface
     private $paths;
 
     /**
-     * @param string[] $paths
+     * @var string
      */
-    public function __construct(array $paths)
+    private $fileExtension;
+
+    /**
+     * @param string[] $paths
+     * @param string $fileExtension
+     */
+    public function __construct(array $paths, $fileExtension = 'php')
     {
         $this->paths = $paths;
+        $this->fileExtension = $fileExtension;
     }
 
     /**
@@ -37,7 +44,7 @@ class FileReader implements ReaderInterface
             $locale = $locale . '/' . $group;
         }
 
-        $fileName = $locale . '-locale.php';
+        $fileName = $locale . '-locale.' . $this->fileExtension;
         $content = [];
 
         foreach ($this->paths as $path)
