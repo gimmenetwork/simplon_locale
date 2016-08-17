@@ -162,7 +162,7 @@ class Locale
 
         if (empty($this->localeContent[$contentKey]))
         {
-            $this->localeContent[$contentKey] = $this->reader->loadLocale($locale, $this->getGroup());
+            $this->localeContent[$contentKey] = $this->reader->prepareLocale($locale, $this->getGroup());
         }
 
         return $this;

@@ -15,5 +15,5 @@ interface ReaderInterface
      * @return array
      * @throw LocaleException
      */
-    public function loadLocale($locale, $group = null);
+    public function prepareLocale($locale, $group = null);
 }

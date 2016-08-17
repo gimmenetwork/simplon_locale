@@ -1,12 +1,12 @@
 <?php
 
 use Simplon\Locale\Locale;
-use Simplon\Locale\Readers\FileReader;
+use Simplon\Locale\Readers\PhpFileReader;
 
 require __DIR__ . '/../vendor/autoload.php';
 header('Content-Type: text/html; charset=utf-8');
 
-$reader = new FileReader(__DIR__ . '/locales');
+$reader = new PhpFileReader([__DIR__ . '/locales']);
 $locale = new Locale($reader, ['en', 'de']);
 
 // ----------------------------------------------

@@ -8,7 +8,7 @@ use Simplon\Locale\LocaleException;
  * Class FileReader
  * @package Simplon\Locale\Readers
  */
-class FileReader implements ReaderInterface
+abstract class FileReader implements ReaderInterface
 {
     /**
      * @var string[]
@@ -16,19 +16,24 @@ class FileReader implements ReaderInterface
     private $paths;
 
     /**
-     * @var string
-     */
-    private $fileExtension;
-
-    /**
      * @param string[] $paths
-     * @param string $fileExtension
      */
-    public function __construct(array $paths, $fileExtension = 'php')
+    public function __construct(array $paths)
     {
         $this->paths = $paths;
-        $this->fileExtension = $fileExtension;
     }
+
+    /**
+     * @return string
+     */
+    abstract public function getFileExtension();
+
+    /**
+     * @param string $pathFile
+     *
+     * @return array
+     */
+    abstract public function loadLocale($pathFile);
 
     /**
      * @param string $locale
@@ -37,14 +42,14 @@ class FileReader implements ReaderInterface
      * @return array
      * @throws LocaleException
      */
-    public function loadLocale($locale, $group = null)
+    public function prepareLocale($locale, $group = null)
     {
         if ($group !== null)
         {
             $locale = $locale . '/' . $group;
         }
 
-        $fileName = $locale . '-locale.' . $this->fileExtension;
+        $fileName = $locale . '-locale.' . $this->getFileExtension();
         $content = [];
 
         foreach ($this->paths as $path)
@@ -57,7 +62,7 @@ class FileReader implements ReaderInterface
             }
 
             /** @noinspection PhpIncludeInspection */
-            $content = array_merge($content, require $pathFile);
+            $content = array_merge($content, $this->loadLocale($pathFile));
         }
 
         return $content;
