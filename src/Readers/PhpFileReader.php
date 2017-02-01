@@ -23,7 +23,12 @@ class PhpFileReader extends FileReader
      */
     public function loadLocale($pathFile)
     {
-        /** @noinspection PhpIncludeInspection */
-        return require $pathFile;
+        if (file_exists($pathFile))
+        {
+            /** @noinspection PhpIncludeInspection */
+            return require $pathFile;
+        }
+
+        return [];
     }
 }

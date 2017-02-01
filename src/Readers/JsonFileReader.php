@@ -23,6 +23,11 @@ class JsonFileReader extends FileReader
      */
     public function loadLocale($pathFile)
     {
-        return json_decode(file_get_contents($pathFile), true);
+        if (file_exists($pathFile))
+        {
+            return json_decode(file_get_contents($pathFile), true);
+        }
+
+        return [];
     }
 }
