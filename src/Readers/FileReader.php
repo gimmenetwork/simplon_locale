@@ -2,8 +2,6 @@
 
 namespace Simplon\Locale\Readers;
 
-use Simplon\Locale\LocaleException;
-
 /**
  * Class FileReader
  * @package Simplon\Locale\Readers
@@ -40,7 +38,6 @@ abstract class FileReader implements ReaderInterface
      * @param string $group
      *
      * @return array
-     * @throws LocaleException
      */
     public function prepareLocale($locale, $group = null)
     {
@@ -55,11 +52,6 @@ abstract class FileReader implements ReaderInterface
         foreach ($this->paths as $path)
         {
             $pathFile = $path . '/' . $fileName;
-
-            if (file_exists($pathFile) === false)
-            {
-                throw new LocaleException('Missing locale "' . $fileName . '" (assumed path: ' . $pathFile . ')');
-            }
 
             /** @noinspection PhpIncludeInspection */
             $content = array_merge($content, $this->loadLocale($pathFile));

@@ -14,7 +14,6 @@ class Locale
      * @var ReaderInterface
      */
     private $reader;
-
     /**
      * @var array
      */
@@ -24,12 +23,10 @@ class Locale
      * @var string
      */
     private $currentLocale = 'en';
-
     /**
      * @var string
      */
     private $group;
-
     /**
      * @var array
      */
@@ -154,7 +151,6 @@ class Locale
      * @param string $locale
      *
      * @return Locale
-     * @throws LocaleException
      */
     private function loadLocaleContent($locale)
     {
