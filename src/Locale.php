@@ -5,7 +5,6 @@ namespace Simplon\Locale;
 use Simplon\Locale\Readers\ReaderInterface;
 
 /**
- * Class Locale
  * @package Simplon\Locale
  */
 class Locale
@@ -18,13 +17,12 @@ class Locale
      * @var array
      */
     private $availableLocales;
-
     /**
      * @var string
      */
     private $currentLocale = 'en';
     /**
-     * @var string
+     * @var null|string
      */
     private $group;
     /**
@@ -36,16 +34,16 @@ class Locale
      * @param ReaderInterface $reader
      * @param array $availableLocales
      */
-    public function __construct(ReaderInterface $reader, $availableLocales = [])
+    public function __construct(ReaderInterface $reader, array $availableLocales = [])
     {
         $this->reader = $reader;
         $this->availableLocales = $availableLocales;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getGroup()
+    public function getGroup(): ?string
     {
         return $this->group;
     }
@@ -55,7 +53,7 @@ class Locale
      *
      * @return Locale
      */
-    public function setGroup($group)
+    public function setGroup(string $group): self
     {
         $this->group = $group;
 
@@ -65,7 +63,7 @@ class Locale
     /**
      * @return string
      */
-    public function getCurrentLocale()
+    public function getCurrentLocale(): string
     {
         return $this->currentLocale;
     }
@@ -75,7 +73,7 @@ class Locale
      *
      * @return Locale
      */
-    public function setLocale($locale)
+    public function setLocale(string $locale): self
     {
         // validated locale
         if ($this->isValidLocale($locale))
@@ -92,7 +90,7 @@ class Locale
      *
      * @return string
      */
-    public function get($key, $params = [])
+    public function get(string $key, array $params = []): string
     {
         // make sure that we have the locale content
         $this->loadLocaleContent($this->currentLocale);
@@ -124,7 +122,7 @@ class Locale
      *
      * @return bool
      */
-    private function isValidLocale($locale)
+    private function isValidLocale(string $locale): bool
     {
         return in_array($locale, $this->availableLocales);
     }
@@ -134,7 +132,7 @@ class Locale
      *
      * @return string
      */
-    private function getContentKey($locale)
+    private function getContentKey(string $locale): string
     {
         $contentKey = $locale;
         $group = $this->getGroup();
@@ -152,7 +150,7 @@ class Locale
      *
      * @return Locale
      */
-    private function loadLocaleContent($locale)
+    private function loadLocaleContent(string $locale): Locale
     {
         $contentKey = $this->getContentKey($locale);
 

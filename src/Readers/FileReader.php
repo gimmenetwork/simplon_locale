@@ -3,7 +3,6 @@
 namespace Simplon\Locale\Readers;
 
 /**
- * Class FileReader
  * @package Simplon\Locale\Readers
  */
 abstract class FileReader implements ReaderInterface
@@ -24,14 +23,14 @@ abstract class FileReader implements ReaderInterface
     /**
      * @return string
      */
-    abstract public function getFileExtension();
+    abstract public function getFileExtension(): string;
 
     /**
      * @param string $pathFile
      *
      * @return array
      */
-    abstract public function loadLocale($pathFile);
+    abstract public function loadLocale(string $pathFile): array;
 
     /**
      * @param string $locale
@@ -39,7 +38,7 @@ abstract class FileReader implements ReaderInterface
      *
      * @return array
      */
-    public function prepareLocale($locale, $group = null)
+    public function prepareLocale(string $locale, ?string $group = null): array
     {
         if ($group !== null)
         {

@@ -3,17 +3,16 @@
 namespace Simplon\Locale\Readers;
 
 /**
- * Interface ReaderInterface
  * @package Simplon\Locale\Readers
  */
 interface ReaderInterface
 {
     /**
      * @param string $locale
-     * @param string $group
+     * @param null|string $group
      *
      * @return array
      * @throw LocaleException
      */
-    public function prepareLocale($locale, $group = null);
+    public function prepareLocale(string $locale, ?string $group = null): array;
 }

@@ -11,7 +11,7 @@ class JsonFileReader extends FileReader
     /**
      * @return string
      */
-    public function getFileExtension()
+    public function getFileExtension(): string
     {
         return 'json';
     }
@@ -21,7 +21,7 @@ class JsonFileReader extends FileReader
      *
      * @return array
      */
-    public function loadLocale($pathFile)
+    public function loadLocale(string $pathFile): array
     {
         if (file_exists($pathFile))
         {
