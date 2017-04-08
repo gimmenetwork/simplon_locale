@@ -34,7 +34,7 @@ abstract class FileReader implements ReaderInterface
 
     /**
      * @param string $locale
-     * @param string $group
+     * @param null|string $group
      *
      * @return array
      */
@@ -47,6 +47,16 @@ abstract class FileReader implements ReaderInterface
 
         $fileName = $locale . '-locale.' . $this->getFileExtension();
         $content = [];
+
+        //
+        // handle regions e.g. en-us
+        //
+
+        if (strpos($locale, '-') !== false)
+        {
+            $regions = explode('-', $locale);
+            $content = $this->prepareLocale($regions[0]);
+        }
 
         foreach ($this->paths as $path)
         {
