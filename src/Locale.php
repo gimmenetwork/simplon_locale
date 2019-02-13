@@ -32,7 +32,7 @@ class Locale
 
     /**
      * @param ReaderInterface $reader
-     * @param array $availableLocales
+     * @param array           $availableLocales
      */
     public function __construct(ReaderInterface $reader, array $availableLocales = [])
     {
@@ -86,11 +86,11 @@ class Locale
 
     /**
      * @param string $key
-     * @param array $params
+     * @param array  $params
      *
-     * @return string
+     * @return string|null
      */
-    public function get(string $key, array $params = []): string
+    public function get(string $key, array $params = []): ?string
     {
         // make sure that we have the locale content
         $this->loadLocaleContent($this->currentLocale);
@@ -100,7 +100,7 @@ class Locale
 
         if (empty($this->localeContent[$contentKey][$key]))
         {
-            return $key;
+            return null;
         }
 
         $string = $this->localeContent[$contentKey][$key];
