@@ -9,6 +9,8 @@ use Simplon\Locale\Readers\ReaderInterface;
  */
 class Locale
 {
+    const FALLBACK_LOCALE = 'en';
+
     /**
      * @var ReaderInterface
      */
@@ -20,7 +22,11 @@ class Locale
     /**
      * @var string
      */
-    private $currentLocale = 'en';
+    private $fallbackLocale;
+    /**
+     * @var string
+     */
+    private $currentLocale = self::FALLBACK_LOCALE;
     /**
      * @var null|string
      */
@@ -33,11 +39,13 @@ class Locale
     /**
      * @param ReaderInterface $reader
      * @param array           $availableLocales
+     * @param string          $fallbackLocale
      */
-    public function __construct(ReaderInterface $reader, array $availableLocales = [])
+    public function __construct(ReaderInterface $reader, array $availableLocales = [], string $fallbackLocale = self::FALLBACK_LOCALE)
     {
         $this->reader = $reader;
         $this->availableLocales = $availableLocales;
+        $this->fallbackLocale = $fallbackLocale;
     }
 
     /**
@@ -100,7 +108,16 @@ class Locale
 
         if (empty($this->localeContent[$contentKey][$key]))
         {
-            return null;
+            // make sure that we have the locale content
+            $this->loadLocaleContent($this->fallbackLocale);
+
+            // handle content
+            $contentKey = $this->getContentKey($this->fallbackLocale);
+
+            if (empty($this->localeContent[$contentKey][$key]))
+            {
+                return null;
+            }
         }
 
         $string = $this->localeContent[$contentKey][$key];
