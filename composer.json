@@ -23,5 +23,8 @@
     "psr-4": {
       "Simplon\\Locale\\": "src/"
     }
+  },
+  "replace": {
+    "simplon/locale": "0.4.*"
   }
 }
